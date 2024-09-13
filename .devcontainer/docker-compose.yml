@@ -1,0 +1,25 @@
+version: '3'
+# suppose your service needs postgres or minio
+# add or remove stuff based on your needs
+services:
+  app:
+    build: 
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ~/.ssh:/opt/motiong/.ssh
+      - ..:/opt/motiong/code
+    command: ["tail -f /dev/null"]
+  
+  minio:
+    image: minio/minio
+    ports:
+      - 9002:9000
+      - 9003:9001
+    environment:
+      MINIO_ACCESS_KEY: minio_access_key
+      MINIO_SECRET_KEY: minio_secret_key
+    command: server /data --console-address ":9001"
+
+
+

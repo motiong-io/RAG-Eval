@@ -1,0 +1,79 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  generateName: image-sampleworkflow-
+  name: image-to-md
+  namespace: dev
+spec:
+  entrypoint: main
+  arguments:
+    parameters:
+      - name: workflow-task-id
+  imagePullSecrets:
+  - name: motiong-registry-key
+  ttlStrategy:
+  # help delete the workflow
+    secondsAfterCompletion: 300
+  podGC:
+  # help delete the pod
+    strategy: OnPodCompletion
+    deleteDelayDuration: 300s
+  templates:
+    - name: main
+      steps:
+        - - name: processor
+            template: specialized-in-image
+            arguments:
+              parameters:
+                - name: workflow-task-id
+                  value: "{{workflow.parameters.workflow-task-id}}"
+        #   - name: image-processor
+        #     template: specialized-in-image
+        #     arguments:
+        #       parameters:
+        #         - name: workflow-task-id
+        #           value: "{{workflow.parameters.workflow-task-id}}"
+        # - - name: summariser
+        #     template: specialized-in-md
+        #     arguments:
+        #       parameters:
+        #         - name: workflow-task-id
+        #           value: "{{workflow.parameters.workflow-task-id}}"
+    - name: specialized-in-image
+      inputs:
+        parameters:
+          - name: workflow-task-id
+      container:
+        image: motiongcloud.azurecr.io/motiongcloud/mock-video-processor:0.0.1
+        args: ["process-image","--workflow-task-id","{{inputs.parameters.workflow-task-id}}"]
+        envFrom:
+          - configMapRef:
+              name: generic-image-processor
+    # - name: specialized-in-image
+    #   inputs:
+    #     parameters:
+    #       - name: workflow-task-id
+    #   container:
+    #     image: motiongcloud.azurecr.io/motiongcloud/mock-video-processor:0.0.1
+    #     args: ["process-image-with-task","--workflow-task-id","{{inputs.parameters.dir-to-process}}"]
+    #     envFrom:
+    #       - configMapRef:
+    #           name: the-manually-created-configmap
+    # - name: specialized-in-md
+    #   inputs:
+    #     parameters:
+    #       - name: workflow-task-id
+    #   container:
+    #     image: motiongcloud.azurecr.io/motiongcloud/mock-video-processor:0.0.1
+    #     args: ["process-md-with-task","--workflow-task-id","{{inputs.parameters.dir-to-process}}"]
+    #     envFrom:
+    #       - configMapRef:
+    #           name: the-manually-created-configmap
+    # well we will test later
+    # initContainers:
+    # - name: hello
+    #   image: motiongcloud.azurecr.io/motiongcloud/mock-video-processor:0.0.1
+    #   command: ["alembic", "upgrade", "head"]
+    #   envFrom:
+    #   - configMapRef:
+    #       name: the-manually-created-configmap

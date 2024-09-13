@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "app"
+version = "0.1.0"
+description = ""
+authors = ["Shi Hongkun <shongkong23@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pydantic-settings = "^2.5.2"
+openai = "^1.45.0"
+ragas = "^0.1.18"
+llama-index-core = "^0.11.9"
+llama-index-embeddings-openai = "^0.2.4"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.8.0"
+isort = "^5.13.2"
+pytest = "^8.3.3"
+pytest-cov = "^5.0.0"
+pyyaml = "^6.0.2"
+requests = "^2.32.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
