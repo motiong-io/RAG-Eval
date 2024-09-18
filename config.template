@@ -1,0 +1,31 @@
+"config" is git-ignored
+However, no need to create a config on your own
+Ask the project owner privately for a copy
+---------------
+# config
+
+# Object storage configuration
+OBJECT_STORAGE_ENDPOINT_URL=http://xxx
+# Optional: Only required if not using Azure connection string
+OBJECT_STORAGE_ACCESS_KEY=xxx
+OBJEST_STORAGE_SECRET_KEY=xxx
+BUCKET_NAME=cool-bucket
+
+# Workflow service configuration
+WORKFLOW_SERVICE_DOMAIN=xxx
+WORKFLOW_SERVICE_PORT=xxx
+
+# Additional required fields
+ENV=development
+SERVICE_NAME=xxx
+SERVICE_VERSION=x.x.x
+MOUNT_PATH=/x/x/x/x
+
+# openai
+OPENAI_API_KEY="x"
+OPENAI_BASE_URL="http://x/v1/"
+
+# eval
+# openai embedding model pricing: text-embedding-3-large > text-embedding-ada-002 > text-embedding-3-small
+EVAL_LLM=gpt-4o-mini
+EVAL_EMBEDDING=text-embedding-3-small

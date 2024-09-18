@@ -32,6 +32,11 @@ class EnvSettings(BaseSettings):
     OPENAI_API_KEY: str
     OPENAI_BASE_URL: str
 
+    # eval
+    EVAL_LLM: str
+    EVAL_EMBEDDING: str
+    FILE_EXT: str
+
 
 class LocalDevSettings(EnvSettings):
     # it reads from a config file at root
