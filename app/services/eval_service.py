@@ -13,6 +13,7 @@ from ragas.metrics import *
 from app.embedding.langchain_embedding import CustomizedLangchainEmbeddingsWrapper
 from app.eval.eval_manager import EvalManager
 from app.llm.langchain_llm import LangchainLLMFactory
+from app.llm.llm_api_price import LLM_API_PRICE
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -123,5 +124,15 @@ class EvalService:
         self.save_result(result, output_dir, output_file_name)
 
         # Cost
-        print("Total tokens: ", result.total_tokens())
-        # print("Total cost: ", result.total_cost())
+        total_tokens = result.total_tokens()
+        # logger.info(f"Input tokens: {total_tokens.input_tokens}")
+        # logger.info(f"Output tokens: {total_tokens.output_tokens}")
+        logger.info(f"Total tokens: {total_tokens}")
+
+        cost_per_input_token, cost_per_output_token = LLM_API_PRICE.get(self.llm.model)
+        try:
+            total_cost = result.total_cost(cost_per_input_token, cost_per_output_token)
+            logger.info(f"Total cost: {total_cost}")
+        except ValueError as e:
+            logger.error(e)
+            logger.info("Cost calculation failed. Either due a free local model or  price not rigistered in the llm_api_price.py.")
