@@ -11,6 +11,7 @@ from ragas.llms.base import BaseRagasLLM
 from ragas.metrics import *
 
 from app.embedding.langchain_embedding import CustomizedLangchainEmbeddingsWrapper
+from app.eval.eval_manager import EvalManager
 from app.llm.langchain_llm import LangchainLLMFactory
 
 logger = logging.getLogger(__name__)
@@ -23,25 +24,24 @@ class EvalService:
         self,
         llm: LangchainLLMFactory,
         embedding: CustomizedLangchainEmbeddingsWrapper,
+        eval_manager: EvalManager,
         volume_mount_dir: str,
         questions: List[str],
         answers: List[str],
         contexts: List[List[str]],
         reference: Optional[List[str]] = None,
         ground_truths: Optional[List[str]] = None,
-        exp_name: str = "ragas",
-        file_ext: str = "csv",
     ) -> None:
         self.llm = llm
         self.embedding = embedding
+        self.eval_manager = eval_manager
         self.volume_mount_dir = volume_mount_dir
         self.questions = questions if questions is not None else []
         self.ground_truths = ground_truths if ground_truths is not None else []
         self.answers = answers if answers is not None else []
         self.contexts = contexts if contexts is not None else []
         self.reference = reference if reference is not None else []
-        self.exp_name = exp_name
-        self.file_ext = file_ext
+
         # To dict
         self.data = {
             "question": questions,
@@ -54,7 +54,7 @@ class EvalService:
         # Convert dict to dataset
         self.dataset = Dataset.from_dict(self.data)
 
-    def evaluate(
+    def ragas_evaluate(
         self,
         dataset=None,
         metrics=[context_precision, context_recall, faithfulness, answer_relevancy],
@@ -113,17 +113,13 @@ class EvalService:
         return get_token_usage_for_openai(dataset)
 
     def run(self) -> None:
-        result = self.evaluate(
-            metrics=[
-                context_precision,  # 上下文精准度 衡量检索出的上下文中有用信息与无用信息的比率。该指标通过分析 question 和 contexts 来计算。
-                context_recall,  # 上下文召回率 用来评估是否检索到了解答问题所需的全部相关信息。这一指标依据 ground_truth（此为框架中唯一基于人工标注的真实数据的指标）和 contexts 进行计算。
-                faithfulness,  # 真实性 用于衡量生成答案的事实准确度。它通过对比给定上下文中正确的陈述与生成答案中总陈述的数量来计算。这一指标结合了 question、contexts 和 answer。
-                answer_relevancy,  # 答案相关度 评估生成答案与问题的关联程度。例如，对于问题“法国在哪里及其首都是什么？”，答案“法国位于西欧。”的答案相关度较低，因为它只回答了问题的一部分。
-            ],
+        result = self.ragas_evaluate(
+            metrics=self.eval_manager.eval_metrics,
         )
+
         # Customize your output file name
         output_dir = os.path.join(self.volume_mount_dir, "outputs")
-        output_file_name = f"ragas_{self.exp_name}_{self.llm.model}_{self.embedding.model}.{self.file_ext}"
+        output_file_name = f"ragas_{self.eval_manager.exp_name}_{self.llm.model}_{self.embedding.model}.{self.eval_manager.eval_result_file_ext}"
         self.save_result(result, output_dir, output_file_name)
 
         # Cost

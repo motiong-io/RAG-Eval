@@ -33,9 +33,16 @@ class EnvSettings(BaseSettings):
     OPENAI_BASE_URL: str
 
     # eval
-    EVAL_LLM: str
-    EVAL_EMBEDDING: str
-    FILE_EXT: str
+    EVAL_LLM: str = "gpt-4o-mini"
+    EVAL_EMBEDDING: str = "text-embedding-3-small"
+    FILE_EXT: str = "csv"
+    EXP_NAME: str = "ragas"
+    EVAL_METRICS: list[str] = [
+        "context_precision",
+        "context_recall",
+        "faithfulness",
+        "answer_relevancy",
+    ]
 
 
 class LocalDevSettings(EnvSettings):

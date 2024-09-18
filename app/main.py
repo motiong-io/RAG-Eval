@@ -16,6 +16,7 @@ from ragas.metrics import (
 from ragas.run_config import RunConfig, add_async_retry, add_retry
 
 from app.embedding.langchain_embedding import CustomizedLangchainEmbeddingsWrapper
+from app.eval.eval_manager import EvalManager
 from app.llm.langchain_llm import LangchainLLMFactory
 from app.services.eval_service import EvalService
 from app.utils.config import env
@@ -73,17 +74,22 @@ def main():
         api_key=env.OPENAI_API_KEY,
     )
 
+    eval_manager = EvalManager(
+        exp_name=env.EXP_NAME,
+        eval_result_file_ext=env.FILE_EXT,
+        eval_metrics_str=env.EVAL_METRICS,
+    )
+
     s = EvalService(
         llm=llm,
         embedding=embb,
+        eval_manager=eval_manager,
         volume_mount_dir=env.MOUNT_PATH,
         questions=questions,
         answers=answers,
         contexts=contexts,
         reference=reference,
         ground_truths=ground_truths,
-        exp_name="ragas",
-        file_ext=env.FILE_EXT,
     )
 
     s.run()

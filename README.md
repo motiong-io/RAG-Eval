@@ -1,6 +1,13 @@
 # RAG-Eval
 A standard process of RAG/KG evaluation
 
+# how to use
+1. git clone
+1. install docker
+1. install dev container in your vs code
+1. ask the project owner privately for a copy of "config"
+1. modify the config, can refer to config.template
+
 # how to setup your repo
 * go to github, create repo
 * git clone
