@@ -124,15 +124,22 @@ class EvalService:
         self.save_result(result, output_dir, output_file_name)
 
         # Cost
-        total_tokens = result.total_tokens()
-        # logger.info(f"Input tokens: {total_tokens.input_tokens}")
-        # logger.info(f"Output tokens: {total_tokens.output_tokens}")
-        logger.info(f"Total tokens: {total_tokens}")
+        try:
+            total_tokens = result.total_tokens()
+            logger.info(f"Total tokens: {total_tokens}")
 
-        cost_per_input_token, cost_per_output_token = LLM_API_PRICE.get(self.llm.model)
+            cost_per_input_token, cost_per_output_token = LLM_API_PRICE.get(
+                self.llm.model
+            )
+        except Exception as e:
+            logger.error(e)
+            logger.info("Token & cost calculation failed.")
+
         try:
             total_cost = result.total_cost(cost_per_input_token, cost_per_output_token)
             logger.info(f"Total cost: {total_cost}")
         except ValueError as e:
             logger.error(e)
-            logger.info("Cost calculation failed. Either due a free local model or  price not rigistered in the llm_api_price.py.")
+            logger.info(
+                "Cost calculation failed. Either due a free local model or  price not rigistered in the llm_api_price.py."
+            )
