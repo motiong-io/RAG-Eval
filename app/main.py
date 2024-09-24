@@ -7,12 +7,6 @@ import openai
 import ragas
 from datasets import Dataset
 from ragas.integrations.helicone import helicone_config
-from ragas.metrics import (
-    answer_relevancy,
-    context_precision,
-    context_recall,
-    faithfulness,
-)
 from ragas.run_config import RunConfig, add_async_retry, add_retry
 
 from app.embedding.langchain_embedding import CustomizedLangchainEmbeddingsWrapper
@@ -20,41 +14,47 @@ from app.eval.eval_manager import EvalManager
 from app.llm.langchain_llm import LangchainLLMFactory
 from app.services.eval_service import EvalService
 from app.utils.config import env
+from tests.qa_example4_agentx import answers, contexts, ground_truths, questions, reference
 
 
 def main():
     # Your RAG/KG Q & A, etc here
-    questions = [
-        "What did the president say about Justice Breyer?",
-        "What did the president say about Intel's CEO?",
-        "What did the president say about gun violence?",
-    ]
-    ground_truths = [
-        "The president said that Justice Breyer has dedicated his life to serve the country and thanked him for his service.",
-        "The president said that Pat Gelsinger is ready to increase Intel's investment to $100 billion.",
-        "The president asked Congress to pass proven measures to reduce gun violence.",
-    ]
-    answers = [
-        "What did the president say about Justice Breyer?",
-        "What did the president say about Intel's CEO?",
-        "What did the president say about gun violence?",
-    ]
-    contexts = [
-        [
-            "The president said that Justice Breyer has dedicated his life to serve the country and thanked him for his service."
-        ],
-        [
-            "The president said that Pat Gelsinger is ready to increase Intel's investment to $100 billion."
-        ],
-        [
-            "The president asked Congress to pass proven measures to reduce gun violence."
-        ],
-    ]
-    reference = [
-        "The president said that Justice Breyer has dedicated his life to serve the country and thanked him for his service.",
-        "The president said that Pat Gelsinger is ready to increase Intel's investment to $100 billion.",
-        "The president asked Congress to pass proven measures to reduce gun violence.",
-    ]
+    # questions = [
+    #     "What did the president say about Justice Breyer?",
+    #     "What did the president say about Intel's CEO?",
+    #     "What did the president say about gun violence?",
+    # ]
+
+    # ground_truths has to be a list of list, I don't know why -_-
+    # ground_truths = [
+    #     "The president said that Justice Breyer has dedicated his life to serve the country and thanked him for his service.",
+    #     "The president said that Pat Gelsinger is ready to increase Intel's investment to $100 billion.",
+    #     "The president asked Congress to pass proven measures to reduce gun violence.",
+    # ]
+
+    # answers = [
+    #     "What did the president say about Justice Breyer?",
+    #     "What did the president say about Intel's CEO?",
+    #     "What did the president say about gun violence?",
+    # ]
+
+    # contexts = [
+    #     [
+    #         "The president said that Justice Breyer has dedicated his life to serve the country and thanked him for his service."
+    #     ],
+    #     [
+    #         "The president said that Pat Gelsinger is ready to increase Intel's investment to $100 billion."
+    #     ],
+    #     [
+    #         "The president asked Congress to pass proven measures to reduce gun violence."
+    #     ],
+    # ]
+
+    # reference = [
+    #     "The president said that Justice Breyer has dedicated his life to serve the country and thanked him for his service.",
+    #     "The president said that Pat Gelsinger is ready to increase Intel's investment to $100 billion.",
+    #     "The president asked Congress to pass proven measures to reduce gun violence.",
+    # ]
     # Inference
     for query in questions:
         # answers.append(rag_chain.invoke(query))
