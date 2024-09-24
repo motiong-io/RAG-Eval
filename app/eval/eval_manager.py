@@ -37,7 +37,10 @@ class EvalManager:
                 self.eval_metrics.append(faithfulness)
             elif metric_str == "answer_relevancy":
                 self.eval_metrics.append(answer_relevancy)
-        return self.eval_metrics
+            elif metric_str == "answer_correctness":
+                self.eval_metrics.append(answer_correctness)
+            elif metric_str == "answer_similarity":
+                self.eval_metrics.append(answer_similarity)
 
     # TODO:
     # 1. Check through metrics.ALL_METRICS, whose name equal to the eval_metrics_str, then append to self.eval_metrics
