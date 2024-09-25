@@ -38,6 +38,7 @@ def main():
     #     "What did the president say about gun violence?",
     # ]
 
+    # contexts are the retrieved chunks
     # contexts = [
     #     [
     #         "The president said that Justice Breyer has dedicated his life to serve the country and thanked him for his service."
@@ -50,6 +51,7 @@ def main():
     #     ],
     # ]
 
+    # I have no idea liao -_-
     # reference = [
     #     "The president said that Justice Breyer has dedicated his life to serve the country and thanked him for his service.",
     #     "The president said that Pat Gelsinger is ready to increase Intel's investment to $100 billion.",
