@@ -62,3 +62,10 @@ A standard process of RAG/KG evaluation
     poetry update motiong-io-motiongapis-grpc-python
     poetry remove motiong-io-motiongapis-grpc-python
     ```
+
+# input
+* questions, a list of str
+* answers, a list of str
+* ground_truths. The true answer, it should be a list of str
+* contexts. They are the retrieved chunks, a list of lists of str
+* reference. They could be the true chuks to the true answer. They are a list of lists of str

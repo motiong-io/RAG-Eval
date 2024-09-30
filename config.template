@@ -29,3 +29,7 @@ OPENAI_BASE_URL="http://x/v1/"
 # openai embedding model pricing: text-embedding-3-large > text-embedding-ada-002 > text-embedding-3-small
 EVAL_LLM=gpt-4o-mini
 EVAL_EMBEDDING=text-embedding-3-small
+FILE_EXT=xlsx
+EXP_NAME=ShiHK_exp1
+EVAL_METRICS=["answer_correctness", "answer_similarity", "context_precision", "context_recall", "faithfulness", "answer_relevancy"]
+

@@ -14,19 +14,18 @@ from app.eval.eval_manager import EvalManager
 from app.llm.langchain_llm import LangchainLLMFactory
 from app.services.eval_service import EvalService
 from app.utils.config import env
-from tests.qa_example4_agentx import answers, contexts, ground_truths, questions, reference
+from tests.qa_example5_agentx_correct_ref import answers, contexts, ground_truths, questions, reference
 
 
 def main():
-    # Your RAG/KG Q & A, etc here
+    # #Your RAG/KG Q & A, etc here
     # questions = [
     #     "What did the president say about Justice Breyer?",
     #     "What did the president say about Intel's CEO?",
     #     "What did the president say about gun violence?",
     # ]
 
-    # ground_truths has to be a list of list, I don't know why -_-
-    # ground_truths = [
+    # #ground_truths can be a list of strings(recommended), or a list of lists
     #     "The president said that Justice Breyer has dedicated his life to serve the country and thanked him for his service.",
     #     "The president said that Pat Gelsinger is ready to increase Intel's investment to $100 billion.",
     #     "The president asked Congress to pass proven measures to reduce gun violence.",
@@ -38,7 +37,7 @@ def main():
     #     "What did the president say about gun violence?",
     # ]
 
-    # contexts are the retrieved chunks
+    # #contexts are the retrieved chunks
     # contexts = [
     #     [
     #         "The president said that Justice Breyer has dedicated his life to serve the country and thanked him for his service."
@@ -51,11 +50,13 @@ def main():
     #     ],
     # ]
 
-    # I have no idea liao -_-
+    # #Required for answer_correctness, answer_similarity, context_precision, context_recall. 
+    # # Not required for faithfulness, answer_relevancy.
+    # # It could be the true chunks to the true answer
     # reference = [
-    #     "The president said that Justice Breyer has dedicated his life to serve the country and thanked him for his service.",
-    #     "The president said that Pat Gelsinger is ready to increase Intel's investment to $100 billion.",
-    #     "The president asked Congress to pass proven measures to reduce gun violence.",
+    #     # "The president said that Justice Breyer has dedicated his life to serve the country and thanked him for his service.",
+    #     # "The president said that Pat Gelsinger is ready to increase Intel's investment to $100 billion.",
+    #     # "The president asked Congress to pass proven measures to reduce gun violence.",
     # ]
     # Inference
     for query in questions:

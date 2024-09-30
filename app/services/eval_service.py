@@ -47,9 +47,9 @@ class EvalService:
         self.data = {
             "question": questions,
             "answer": answers,
-            "contexts": contexts,  # 为解答 question 而从外部知识源检索到的相关上下文。list[list[str]]
-            "reference": reference,  # context_precision 和 context_recall 这两个指标的计算需要 reference。这个信息仅在评估 context_precision 和 context_recall 这两个指标时才必须
-            "ground_truths": ground_truths,  # question 的标准答案，这是唯一需要人工标注的信息。这个信息仅在评估 context_recall 这一指标时才必须。list[list[str]]
+            "contexts": contexts,  # They are the retrieved chunks, a list of lists of str
+            "reference": reference,  # They could be the true chuks to the true answer. They are a list of lists of str
+            "ground_truths": ground_truths,  # The true answer, it should be a list of str
         }
 
         # Convert dict to dataset
